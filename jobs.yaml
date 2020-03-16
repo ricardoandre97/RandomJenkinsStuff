@@ -1,0 +1,31 @@
+- job_name: "job_dsl_example"
+  job_description: "This is my awesome Job"
+  git_url: "ssh://git@localhost:7999/test/test.git"
+  creds_id: "bb"
+  branch: "master"
+  script_path: "Jenkinsfile"
+  parameters:
+    - name: "param1"
+      value: "world"
+      desc: "This is the world"
+      type: stringParam
+    - name: "param2"
+      value: "eath"
+      desc: "This is the ea"
+      type: textParam
+
+- job_name: "job_dsl_example2"
+  job_description: "This is my awesome Job2"
+  git_url: "ssh://git@localhost:7999/test/test.git"
+  creds_id: "bb"
+  branch: "master"
+  script_path: "Jenkinsfile2"
+  parameters:
+  - name: "2"
+    value: "2"
+    desc: "2"
+    type: stringParam
+  - name: "2"
+    value: "2"
+    desc: "2 is the ea"
+    type: textParam
