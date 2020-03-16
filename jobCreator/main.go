@@ -8,21 +8,32 @@ import (
     "io/ioutil"
 )
 
-type Job struct {
-    JobName    string  `yaml:"job_name"`
-    JobDesc    string  `yaml:"job_description"`
-    Params     []Param `yaml:"parameters"`
-    GitURL     string  `yaml:"git_url"`
-    CredsID    string  `yaml:"creds_id"`
-    Branch     string  `yaml:"branch"`
-    ScriptPath string  `yaml:"script_path"`
+type AutoJobs struct {
+    Jobs    []Job    `yaml:"jobs"`
+    Folders []Folder `yaml:"folders"`
 }
 
-type Param struct {
+type Job struct {
+    JobName    string     `yaml:"job_name"`
+    JobDesc    string     `yaml:"job_description"`
+    Params     []JobParam `yaml:"parameters"`
+    GitURL     string     `yaml:"git_url"`
+    CredsID    string     `yaml:"creds_id"`
+    Branch     string     `yaml:"branch"`
+    ScriptPath string     `yaml:"script_path"`
+    JobFolder  string     `yaml:"folder"`
+}
+
+type JobParam struct {
     Name   string  `yaml:"name"`
     Value  string  `yaml:"value"`
     Desc   string  `yaml:"desc"`
     Type   string  `yaml:"type"`
+}
+
+type Folder struct {
+    FolderName string `yaml:"folder_name"`
+    FolderDesc string `yaml:"folder_desc"`
 }
 
 func main() {
@@ -34,8 +45,8 @@ func main() {
     }
 
     // Unmasrshal to struct
-    jobs := []Job{}
-    err := yaml.Unmarshal(data, &jobs)
+    automatedJobs := AutoJobs{}
+    err := yaml.Unmarshal(data, &automatedJobs)
     if err != nil {
         log.Fatalf("error: %v", err)
     }
@@ -50,7 +61,7 @@ func main() {
     }
 
     // Execute the template to the file.
-    err = tmpl.Execute(f, jobs)
+    err = tmpl.Execute(f, automatedJobs)
     if err != nil {
         log.Fatalf("error: %v", err)
     }

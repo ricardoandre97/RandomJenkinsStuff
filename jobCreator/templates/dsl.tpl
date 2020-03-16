@@ -1,7 +1,14 @@
-{{ range $i := . -}}
-
+{{ range $i := .Folders -}}
+folder('{{ $i.FolderName }}') {
+    description('{{ $i.FolderDesc }}')
+}
+{{ end }}
+{{ range $i := .Jobs -}}
+{{ if $i.JobFolder }}
+pipelineJob('{{ $i.JobFolder }}/{{ $i.JobName }}') {
+{{ else }}
 pipelineJob('{{ $i.JobName }}') {
-
+{{ end }}
     description('{{ $i.JobDesc }}')
 {{ if $i.Params }}
     parameters {
@@ -10,7 +17,6 @@ pipelineJob('{{ $i.JobName }}') {
     {{ end -}}
     }
 {{ end }}
-
     definition {
         cpsScm {
             scm {
