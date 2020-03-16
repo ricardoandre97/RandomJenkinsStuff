@@ -1,0 +1,35 @@
+version: "2"
+services:
+  jenkins:
+    image: jenkins/jenkins:2.220
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    network_mode: host
+  gw:
+    image: gw
+    build: src
+    container_name: gw
+    ports:
+      - "9090:9090"
+    environment:
+      SECRET: "123456789"
+      JENKINS_HOST: "http://localhost:8080"
+      API_USER: admin
+      API_PASSWORD: admin
+    network_mode: host
+  bitbucket:
+    image: atlassian/bitbucket-server
+    container_name: bitbucket
+    ports:
+      - "7990:7990"
+    volumes:
+      - "bitbucket:/var/atlassian/application-data/bitbucket"
+    network_mode: host
+volumes:
+  jenkins:
+  bitbucket:
