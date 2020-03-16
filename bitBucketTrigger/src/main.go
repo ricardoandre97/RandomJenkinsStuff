@@ -88,13 +88,14 @@ func triggerJenkins(j jenkins, job string) error {
     defer postResp.Body.Close()
 
     jResp, jErr := ioutil.ReadAll(postResp.Body)
-    log.Print(postResp.StatusCode)
+    log.Printf("Tiggering job gave %v", postResp.StatusCode)
     if jErr != nil {
         return jErr
     }
-    if (postResp.StatusCode >= 200 && postResp.StatusCode <= 299) {
+
+    if !(postResp.StatusCode >= 200 && postResp.StatusCode <= 299) {
         log.Print(string(jResp))
-        return errors.New(fmt.Sprintf("%T Expected 200-299 triggering job but got %v", postResp.StatusCode, resp.StatusCode))
+        return errors.New(fmt.Sprintf("Expected 200-299 triggering job but got %v", postResp.StatusCode))
     }
     return nil
 
@@ -112,8 +113,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
     secret := os.Getenv("SECRET")
 
     if secret == "" {
+        log.Printf("SECRET not present")
         w.WriteHeader(400)
-        w.Write([]byte("Can't validate request since SECRET env is not present"))
         return
     }
 
@@ -126,6 +127,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
         return 
     }
     if !requestIsValid(body, secret, r.Header.Get("X-Hub-Signature")) {
+        log.Printf("Request rejected. Signatures don't match")
         w.WriteHeader(400)
         w.Write([]byte("Request rejected. Signatures don't match"))
         return
@@ -139,8 +141,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
     }
 
     if req.Host == "" || req.User == "" || req.Password == "" {
+        log.Printf("JENKINS_HOST, API_USER, API_PASSWORD vars are mandatory")
         w.WriteHeader(400)
-        w.Write([]byte("JENKINS_HOST, API_USER, API_PASSWORD vars are mandatory"))
         return
     }
 
@@ -163,6 +165,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
         w.Write([]byte(msg))
         return
     }
+    log.Println("Ok")
     w.WriteHeader(200)
 }
 
