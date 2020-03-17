@@ -1,0 +1,33 @@
+folders:
+  - folder_name: "Tests"
+    folder_desc: "Test folder"
+jobs:
+  - job_name: "UnitTest"
+    job_description: "This is my awesome Job"
+    git_url: "ssh://git@localhost:7999/test/test.git"
+    creds_id: "bb"
+    branch: "master"
+    script_path: "Jenkinsfile"
+    folder: ""
+    parameters:
+      - name: "param1"
+        value: "world"
+        desc: "This is the world"
+        type: stringParam
+
+  - job_name: "SmokeTests"
+    job_description: "This is my awesome Job2"
+    git_url: "ssh://git@localhost:7999/test/test.git"
+    creds_id: "bb"
+    branch: "master"
+    script_path: "Jenkinsfile2"
+    folder: "Tests"
+    parameters:
+    - name: "qw2"
+      value: "2"
+      desc: "2"
+      type: stringParam
+    - name: "2"
+      value: "2"
+      desc: "2 is the ea"
+      type: textParam

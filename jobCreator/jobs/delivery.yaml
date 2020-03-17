@@ -1,19 +1,15 @@
 folders:
-  - folder_name: "folder1"
-    folder_desc: "desc for folder"
+  - folder_name: "Deliver"
+    folder_desc: "Deliver folder"
 jobs:
-  - job_name: "job_dsl_example"
+  - job_name: "PushToProd"
     job_description: "This is my awesome Job"
     git_url: "ssh://git@localhost:7999/test/test.git"
     creds_id: "bb"
     branch: "master"
     script_path: "Jenkinsfile"
-    folder: ""
+    folder: "Deliver"
     parameters:
-      - name: "param1"
-        value: "world"
-        desc: "This is the world"
-        type: stringParam
       - name: "param2"
         value: |
           {
@@ -22,13 +18,13 @@ jobs:
         desc: "This is the ea"
         type: textParam
 
-  - job_name: "job_dsl_example2"
+  - job_name: "PushToStg"
     job_description: "This is my awesome Job2"
     git_url: "ssh://git@localhost:7999/test/test.git"
     creds_id: "bb"
     branch: "master"
     script_path: "Jenkinsfile2"
-    folder: "folder1"
+    folder: "Deliver"
     parameters:
     - name: "qw2"
       value: "2"

@@ -2,10 +2,11 @@ package main
 
 import (
     "log"
-    "os"
     "text/template"
     "gopkg.in/yaml.v2"
     "io/ioutil"
+    "bytes"
+    "fmt"
 )
 
 type AutoJobs struct {
@@ -36,37 +37,60 @@ type Folder struct {
     FolderDesc string `yaml:"folder_desc"`
 }
 
-func main() {
+func getDSLTemplate(file string) (string, error) {
 
     // Read jobs file
-    data, dErr := ioutil.ReadFile("jobs.yaml")
+    data, dErr := ioutil.ReadFile(file)
     if dErr != nil {
-        log.Fatalf("File reading error", dErr)
+        return "", dErr
     }
 
     // Unmasrshal to struct
     automatedJobs := AutoJobs{}
     err := yaml.Unmarshal(data, &automatedJobs)
     if err != nil {
-        log.Fatalf("error: %v", err)
+        return "", err
     }
 
     // Parse template
-    tmpl := template.Must(template.ParseFiles("templates/dsl.tpl"))
+    t := template.Must(template.ParseFiles("templates/dsl.tpl"))
 
-    // Create the file
-    f, err := os.Create("job.dsl")
-    if err != nil {
-        log.Fatalf("error: %v", err)
+    var byteTpl bytes.Buffer
+    if err := t.Execute(&byteTpl, automatedJobs); err != nil {
+        return "", err
     }
 
-    // Execute the template to the file.
-    err = tmpl.Execute(f, automatedJobs)
-    if err != nil {
-        log.Fatalf("error: %v", err)
-    }
+    return byteTpl.String(), nil
 
-    // Close the file when done.
-    f.Close()
 }
 
+
+func getDSLJobs(dir string) (string, error) {
+
+    var r string
+
+    files, err := ioutil.ReadDir(dir)
+    if err != nil {
+        return r, err
+    }
+
+    
+    for _, f := range files {
+        str, err := getDSLTemplate(dir+"/"+f.Name())
+        if err != nil {
+            return r, err
+        }
+        r += str+"\n"
+    }
+
+    return r, nil
+
+}
+
+func main() {
+    dsl, err := getDSLJobs("./jobs")
+    if err != nil {
+        log.Fatalf("Error rendering jobs: %v", err)
+    }
+    fmt.Println(dsl)
+}
