@@ -15,7 +15,10 @@ jobs:
         desc: "This is the world"
         type: stringParam
       - name: "param2"
-        value: "eath"
+        value: |
+          {
+            "holi": "holi"
+          }
         desc: "This is the ea"
         type: textParam
 

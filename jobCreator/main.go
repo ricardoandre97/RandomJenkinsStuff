@@ -3,7 +3,7 @@ package main
 import (
     "log"
     "os"
-    "html/template"
+    "text/template"
     "gopkg.in/yaml.v2"
     "io/ioutil"
 )

@@ -13,7 +13,7 @@ pipelineJob('{{ $i.JobName }}') {
 {{ if $i.Params }}
     parameters {
     {{ range $p := $i.Params }}
-        {{ $p.Type }}('{{ $p.Name }}', defaultValue = '{{ $p.Value }}', description = '{{ $p.Desc }}')
+        {{ $p.Type }}('{{ $p.Name }}', defaultValue = {{ if eq $p.Type "textParam" }}'''{{ $p.Value }}'''{{ else }}'{{ $p.Value }}'{{ end }}, description = '{{ $p.Desc }}')
     {{ end -}}
     }
 {{ end }}
