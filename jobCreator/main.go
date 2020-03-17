@@ -6,7 +6,6 @@ import (
     "gopkg.in/yaml.v2"
     "io/ioutil"
     "bytes"
-    "fmt"
 )
 
 type AutoJobs struct {
@@ -92,5 +91,10 @@ func main() {
     if err != nil {
         log.Fatalf("Error rendering jobs: %v", err)
     }
-    fmt.Println(dsl)
+
+    fErr := ioutil.WriteFile("job.dsl", []byte(dsl), 0644)
+    if fErr != nil {
+        log.Fatalf("Unable to write file: %v", fErr)
+    }
+
 }

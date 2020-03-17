@@ -2,18 +2,6 @@ folders:
   - folder_name: "Tests"
     folder_desc: "Test folder"
 jobs:
-  - job_name: "UnitTest"
-    job_description: "This is my awesome Job"
-    git_url: "ssh://git@localhost:7999/test/test.git"
-    creds_id: "bb"
-    branch: "master"
-    script_path: "Jenkinsfile"
-    folder: ""
-    parameters:
-      - name: "param1"
-        value: "world"
-        desc: "This is the world"
-        type: stringParam
 
   - job_name: "SmokeTests"
     job_description: "This is my awesome Job2"

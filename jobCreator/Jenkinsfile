@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Create DSL') {
             agent {
-                docker { image 'jobcreator:v1'}
+                docker { image 'jobcreator:v2'}
             }
             steps {
                 sh 'jobCreator' // This is a binary available in PATH
@@ -11,7 +11,7 @@ pipeline {
         }
         stage('Create Jobs') {
             agent {
-                docker { image 'jobcreator:v1'}
+                docker { image 'jobcreator:v2'}
             }
             steps {
                 jobDsl removedJobAction: 'DELETE', targets: 'job.dsl'
